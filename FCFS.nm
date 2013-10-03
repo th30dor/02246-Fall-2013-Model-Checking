@@ -38,14 +38,16 @@ endmodule
 module scheduler
   job1 : [0..3] init 0; // First job in the queue
   job2 : [0..3] init 0; // Second job in the queue
+  job3 : [0..3] init 0; // Second job in the queue
 
   // Place a new job at the end of the queue
-  [create1] job2=0 -> (job2'=1);
-  [create2] job2=0 -> (job2'=2);
-  [create3] job2=0 -> (job2'=3);
+  [create1] job3=0 -> (job3'=1);
+  [create2] job3=0 -> (job3'=2);
+  [create3] job3=0 -> (job3'=3);
 
   // Shift the queue if there is an empty slot
   [] job1=0 & job2>0 -> (job1'=job2) & (job2'=0);
+  [] job2=0 & job3>0 -> (job2'=job3) & (job3'=0);
 
   // Serve the job at the head of the queue
   [serve1] job1=1 -> true;

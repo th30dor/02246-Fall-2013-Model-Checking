@@ -1,0 +1,28 @@
+mdp
+
+module transitionSystem
+
+   s : [0..3] init 0; // State of the job (inactive/active)
+
+    
+
+  // Create a new job - length chose non-deterministically
+   [] s=0 -> (s'=1);
+   [] s=0 -> (s'=2);
+   [] s=1 -> (s'=1);
+   [] s=2 -> (s'=2);
+   [] s=2 -> (s'=3);
+   [] s=3 -> (s'=3);
+
+   //
+   //label "safe" = temp<=100 | alarm=true;
+
+endmodule
+
+label "fi1" = s=0 | s=3;
+label "fi2" = s=1 | s=3;  
+
+system
+  transitionSystem
+endsystem
+
