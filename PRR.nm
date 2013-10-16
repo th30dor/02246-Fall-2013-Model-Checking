@@ -3,13 +3,19 @@ mdp
 module client1
   state1 : [0..1] init 0; // State of the job (inactive/active)
   task1  : [0..5] init 0; // Length of the job
+  priority1 : [0..1] init 0; // Priority of the job
   
-  // Create a new job - length chose non-deterministically
-  [create1] state1=0 -> (state1'=1) & (task1'=1);
-  [create1] state1=0 -> (state1'=1) & (task1'=2);
-  [create1] state1=0 -> (state1'=1) & (task1'=3);
-  [create1] state1=0 -> (state1'=1) & (task1'=4);
-  [create1] state1=0 -> (state1'=1) & (task1'=5);
+  // Create a new job - length chosen non-deterministically
+  [create1] state1=0 -> (state1'=1) & (task1'=1) & (priority1'=0);
+  [create1] state1=0 -> (state1'=1) & (task1'=2) & (priority1'=0);
+  [create1] state1=0 -> (state1'=1) & (task1'=3) & (priority1'=0);
+  [create1] state1=0 -> (state1'=1) & (task1'=4) & (priority1'=0);
+  [create1] state1=0 -> (state1'=1) & (task1'=5) & (priority1'=0);
+  [create1] state1=0 -> (state1'=1) & (task1'=1) & (priority1'=1);
+  [create1] state1=0 -> (state1'=1) & (task1'=2) & (priority1'=1);
+  [create1] state1=0 -> (state1'=1) & (task1'=3) & (priority1'=1);
+  [create1] state1=0 -> (state1'=1) & (task1'=4) & (priority1'=1);
+  [create1] state1=0 -> (state1'=1) & (task1'=5) & (priority1'=1);
 
   // Serve the job
   [serve1] state1=1 & task1>0 -> (task1'=task1-1);
@@ -35,11 +41,17 @@ module scheduler
   [create1] job1=false -> (job1'=true);
   [create2] job2=false -> (job2'=true);
 
-  // Serve the job that has the least remaining time
+  // If there is only one job in the queue, execute it
   [serve1] job1=true & job2=false -> true;
   [serve2] job1=false & job2=true -> true;
-  [serve1] job1=true & job2=true & switch=true  ->(switch'=false);
-  [serve2] job1=true & job2=true & switch=false ->(switch'=true);
+  
+  // If there are two jobs in the queue, but with different priorities
+  [serve1] job1=true & job2=true & priority1 > priority2 -> true;
+  [serve2] job1=true & job2=true & priority1 < priority2 -> true;
+  
+  // If there are two jobs in the queue, with equal priorities  
+  [serve1] job1=true & job2=true & priority1 = priority2 & switch=true  ->(switch'=false);
+  [serve2] job1=true & job2=true & priority1 = priority2 & switch=false ->(switch'=true);
 
   // Complete any job that has finished
   [finish1] job1=true -> (job1'=false);

@@ -45,8 +45,10 @@ module scheduler
 
   // Shift the queue if there is an empty slot
   [] job1=0 & job2>0 -> (job1'=job2) & (job2'=0);
-  [] job1=1 & job2=2 & priority1 < priority2 -> (job1'=job2) & (job2'=job1); // pay attention at switching, might be wrong
-  [] job1=2 & job2=1 & priority2 < priority1 -> (job1'=job2) & (job2'=job1);
+  
+  // Shift the queue if a job with a bigger priority arrives 
+  [] job1=1 & job2=2 & priority1 < priority2 -> (job1'=2) & (job2'=1); 
+  [] job1=2 & job2=1 & priority2 < priority1 -> (job1'=1) & (job2'=2);
 
   // Serve the job at the head of the queue
   [serve1] job1=1 -> true;

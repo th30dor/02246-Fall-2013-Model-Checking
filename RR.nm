@@ -4,7 +4,7 @@ module client1
   state1 : [0..1] init 0; // State of the job (inactive/active)
   task1  : [0..5] init 0; // Length of the job
   
-  // Create a new job - length chose non-deterministically
+  // Create a new job - length chosen non-deterministically
   [create1] state1=0 -> (state1'=1) & (task1'=1);
   [create1] state1=0 -> (state1'=1) & (task1'=2);
   [create1] state1=0 -> (state1'=1) & (task1'=3);
@@ -35,9 +35,11 @@ module scheduler
   [create1] job1=false -> (job1'=true);
   [create2] job2=false -> (job2'=true);
 
-  // Serve the job that has the least remaining time
+  // If there is only one job in the queue, execute it
   [serve1] job1=true & job2=false -> true;
   [serve2] job1=false & job2=true -> true;
+  
+  // If there are two jobs in the queue, execute them round-robin style
   [serve1] job1=true & job2=true & switch=true  ->(switch'=false);
   [serve2] job1=true & job2=true & switch=false ->(switch'=true);
 
