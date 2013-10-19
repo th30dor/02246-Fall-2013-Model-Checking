@@ -1,0 +1,12 @@
+P>=1 [G ((state1=1) & (priority1=0))=>(!P<=0[F(job1=false)])] 
+
+P>=1 [G ((state2=1) & (priority2=0))=>(!P<=0[F(job2=false)])] 
+
+P>=1 [G ((state1=1) & (priority1=0))=>(P>=1[F(job1=false)])] 
+
+P>=1 [G ((state2=1) & (priority2=0))=>(P>=1[F(job2=false)])] 
+
+P>=1 [G ((state1=1) & (priority1=1))=>(P>=1[F(job1=false)])] 
+
+P>=1 [G ((state2=1) & (priority2=1))=>(P>=1[F(job2=false)])] 
+
