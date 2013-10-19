@@ -29,7 +29,8 @@ module client2 = client1 [state1=state2,
                           task1=task2,
                           create1=create2,
                           serve1=serve2,
-                          finish1=finish2 ]
+                          finish1=finish2,
+			  priority1=priority2 ]
 endmodule
 
 module scheduler
